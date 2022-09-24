@@ -21,6 +21,7 @@ export default class PlaylistCards extends React.Component {
                                 song={song}
                                 moveCallback={moveSongCallback}
                             />
+                            
                         ))
                     }
                 </div>
