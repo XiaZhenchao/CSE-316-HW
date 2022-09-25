@@ -7,6 +7,11 @@ export default class DBManager {
         return JSON.parse(sessionDataString);
     }
 
+    // queryIsSong = (listKey) =>{
+    //     let list = localStorage.getItem("playlister-list-" + listKey);
+    //     return list != null;
+    // }
+
     queryIsList = (key) => {
         let list = localStorage.getItem("playlister-list-" + key);
         return list != null;
@@ -36,8 +41,15 @@ export default class DBManager {
         localStorage.setItem("playlister-data", sessionDataString);
     }
 
-    mutationDeleteList = (key) => {
-        if (this.queryIsList(key))
-            localStorage.removeItem("playlister-list-" + key);
-    }
+    // mutationDeleteList = (key) => {
+    //     if (this.queryIsList(key))
+    //         localStorage.removeItem("playlister-list-" + key);
+    // }
+    // mutationDeleteSong = (listKey,key) => {
+    //      if (this.queryIsSong(listKey))
+    //      {
+    //         let song = "playlister-list-" + listKey
+    //         localStorage.removeItem(song)
+    //      }
+    // }
 }
