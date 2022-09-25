@@ -5,11 +5,13 @@ export default class DeleteSongModal extends Component {
         const { songKeyPair,deleteSongCallback, hideDeleteSongModalCallback,songId } = this.props;
         let songname = "";
         let artistname = "";
-        if (songKeyPair && songId) {
+        if (songKeyPair && songId &&songKeyPair.songs[songId-1]) {
+            console.log("songId: "+ songId);
             songname = songKeyPair.songs[songId-1].title;
             artistname = songKeyPair.songs[songId-1].artist
-            console.log("songId: "+ songId);
+            //console.log("song: "+ songKeyPair.songs[songId-1].title);
         }
+
        return(
         <div class="modal" id="delete-song-modal" data-animation="slideInOutLeft">
         <div class="modal-root" id='verify-delete-list-root'>
@@ -18,7 +20,7 @@ export default class DeleteSongModal extends Component {
             </div>                
             <div class="modal-center">
                 <div class="modal-center-content">
-                    Are you sure you wish to permanently Remove {songname}<span id="delete-song-span"></span> {artistname} from the playlist?
+                    Are you sure you wish to permanently Remove {songname}<span id="delete-song-span"></span> by {artistname} from the playlist?
                 </div>
             </div>
             <div class="modal-south">

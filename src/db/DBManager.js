@@ -41,10 +41,10 @@ export default class DBManager {
         localStorage.setItem("playlister-data", sessionDataString);
     }
 
-    // mutationDeleteList = (key) => {
-    //     if (this.queryIsList(key))
-    //         localStorage.removeItem("playlister-list-" + key);
-    // }
+    mutationDeleteList = (key) => {
+        if (this.queryIsList(key))
+            localStorage.removeItem("playlister-list-" + key);
+    }
     // mutationDeleteSong = (listKey,key) => {
     //      if (this.queryIsSong(listKey))
     //      {

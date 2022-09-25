@@ -51,6 +51,11 @@ class App extends React.Component {
             return keyPair1.name.localeCompare(keyPair2.name);
         });
     }
+
+
+    
+
+
     // THIS FUNCTION BEGINS THE PROCESS OF CREATING A NEW LIST
     createNewList = () => {
         // FIRST FIGURE OUT WHAT THE NEW LIST'S KEY AND NAME WILL BE
@@ -276,6 +281,34 @@ class App extends React.Component {
         }   
     }
 
+    createNewSong =() =>{
+        console.log("createNewSong function has been called")
+        let currentlistLength = this.getPlaylistSize()
+        console.log("currentlistLength: "+ currentlistLength);
+        let newSong = {
+            title: "Untitled",
+            artist: "Unknown",
+            youTubeId: "dQw4w9WgXcQ"
+        };
+        this.state.currentList.songs.splice(currentlistLength,0,newSong)
+        this.setState(prevState => ({
+            listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
+            currentList: this.state.currentList,
+            sessionData: this.state.sessionData,
+            DeleteSongID: prevState.DeleteSongID,
+            RenameSongID: prevState.RenameSongID
+        }), () => {
+            // PUTTING THIS NEW LIST IN PERMANENT STORAGE
+            // IS AN AFTER EFFECT
+            this.db.mutationUpdateList(this.state.currentList);
+
+            // SO IS STORING OUR SESSION DATA
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+        });
+        
+    }
+
+
     renameSong = (Id) => {
         let newSongName = document.getElementById("edit-song-modal-title-textfield").value;
         let newArtistName = document.getElementById("edit-song-modal-artist-textfield").value;
@@ -293,9 +326,7 @@ class App extends React.Component {
             this.db.mutationUpdateList(this.state.currentList);
             this.db.mutationUpdateSessionData(this.state.sessionData);
             //modal.classList.remove("is-visible");
-            document.getElementById("edit-song-modal-title-textfield").value = this.state.currentList.songs[Id-1].title
-            document.getElementById("edit-song-modal-artist-textfield").value = this.state.currentList.songs[Id-1].artist
-            document.getElementById("edit-song-modal-youTubeId-textfield").value = this.state.currentList.songs[Id-1].youTubeId
+            
         });
     }
 
@@ -315,10 +346,10 @@ class App extends React.Component {
             DeleteSongID: prevState.DeleteSongID,
             RenameSongID: prevState.RenameSongID
         }), () => {
-            let modal = document.getElementById("delete-song-modal");
+           // let modal = document.getElementById("delete-song-modal");
             this.db.mutationUpdateList(this.state.currentList);
             this.db.mutationUpdateSessionData(this.state.sessionData);
-                modal.classList.remove("is-visible");
+            // modal.classList.remove("is-visible");
         });
     }
 
@@ -438,6 +469,7 @@ class App extends React.Component {
                     undoCallback={this.undo}
                     redoCallback={this.redo}
                     closeCallback={this.closeCurrentList}
+                    createNewSongCallback = {this.createNewSong}
                 />
                 <PlaylistCards
                     currentList={this.state.currentList}
