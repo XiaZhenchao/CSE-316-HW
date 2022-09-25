@@ -63,6 +63,11 @@ export default class SongCard extends React.Component {
         this.props.deleteSongCallback(this.getItemNum());   
     }
 
+    handleDoubleClick = (event) => {
+        event.stopPropagation();
+        this.props.renameSongCallback(this.getItemNum());   
+        console.log("this.getItemNum(): "+ this.getItemNum())
+    }
 
     render() {
         const { song } = this.props;
@@ -86,6 +91,7 @@ export default class SongCard extends React.Component {
                 onDragLeave={this.handleDragLeave}
                 onDrop={this.handleDrop}
                 draggable="true"
+                onDoubleClick={this.handleDoubleClick}
             >
              {num + "."} <a href= {desirelink}>{song.title} by {song.artist}</a>
              <input
