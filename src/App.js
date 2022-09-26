@@ -530,11 +530,13 @@ class App extends React.Component {
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
     showDeleteListModal() {
+        this.SetModalState(true);
         let modal = document.getElementById("delete-list-modal");
         modal.classList.add("is-visible");
     }
     // THIS FUNCTION IS FOR HIDING THE MODAL
-    hideDeleteListModal() {
+    hideDeleteListModal =()=> {
+        this.SetModalState(false);
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
     }
@@ -542,10 +544,17 @@ class App extends React.Component {
     render() { 
         this.ShortcutDetect()
         let canAddSong = this.state.currentList !== null;
-        let canUndo = this.tps.hasTransactionToUndo();
-        let canRedo = this.tps.hasTransactionToRedo();
         let canClose = this.state.currentList !== null;
         let canAddList = this.state.currentList === null;
+
+        if(this.state.currentList !== null){
+            var canUndo = this.tps.hasTransactionToUndo();
+            var canRedo = this.tps.hasTransactionToRedo();
+        }else{
+            this.tps.clearAllTransactions();
+            var canUndo = false
+            var canRedo = false
+        }
 
        if(this.state.ModalState)
        {

@@ -7,7 +7,7 @@ export default class RenameSongModal extends Component {
         let songname = "";
         let artistname = "";
         let youtubeid = "";
-        if (RenameSongKeyPair && renameId) {
+        if (RenameSongKeyPair && renameId &&  RenameSongKeyPair.songs[renameId-1]) {
             songname = RenameSongKeyPair.songs[renameId-1].title
             artistname = RenameSongKeyPair.songs[renameId-1].artist
             youtubeid = RenameSongKeyPair.songs[renameId-1].youTubeId
