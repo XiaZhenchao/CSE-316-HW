@@ -45,7 +45,10 @@ class App extends React.Component {
         this.state = {
             listKeyPairMarkedForDeletion : null,
             currentList : null,
-            sessionData : loadedSessionData
+            sessionData : loadedSessionData,
+            DeleteSongID: null,
+            RenameSongID: null,
+            ModalState : false
         }
     }
     sortKeyNamePairsByName = (keyNamePairs) => {
@@ -93,7 +96,7 @@ class App extends React.Component {
                 keyNamePairs: updatedPairs
             },
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
         }), () => {
             // PUTTING THIS NEW LIST IN PERMANENT STORAGE
             // IS AN AFTER EFFECT
@@ -132,7 +135,8 @@ class App extends React.Component {
                 keyNamePairs: newKeyNamePairs
             },
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
+
         }), () => {
             // DELETING THE LIST FROM PERMANENT STORAGE
             // IS AN AFTER EFFECT
@@ -179,7 +183,7 @@ class App extends React.Component {
                 keyNamePairs: newKeyNamePairs
             },
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
         }), () => {
             // AN AFTER EFFECT IS THAT WE NEED TO MAKE SURE
             // THE TRANSACTION STACK IS CLEARED
@@ -197,7 +201,7 @@ class App extends React.Component {
             currentList: newCurrentList,
             sessionData: this.state.sessionData,
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
         }), () => {
             // AN AFTER EFFECT IS THAT WE NEED TO MAKE SURE
             // THE TRANSACTION STACK IS CLEARED
@@ -211,7 +215,8 @@ class App extends React.Component {
             currentList: null,
             sessionData: this.state.sessionData,
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
+
         }), () => {
             // AN AFTER EFFECT IS THAT WE NEED TO MAKE SURE
             // THE TRANSACTION STACK IS CLEARED
@@ -224,7 +229,7 @@ class App extends React.Component {
             currentList : list,
             sessionData : this.state.sessionData,
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
         }), () => {
             // UPDATING THE LIST IN PERMANENT STORAGE
             // IS AN AFTER EFFECT
@@ -319,7 +324,7 @@ class App extends React.Component {
             currentList: this.state.currentList,
             sessionData: this.state.sessionData,
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
         }), () => {
             // PUTTING THIS NEW LIST IN PERMANENT STORAGE
             // IS AN AFTER EFFECT
@@ -399,7 +404,8 @@ class App extends React.Component {
             listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
             sessionData: this.state.sessionData,
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
+
         }), () => {
             this.db.mutationUpdateList(this.state.currentList);
             this.db.mutationUpdateSessionData(this.state.sessionData);
@@ -408,17 +414,13 @@ class App extends React.Component {
 
     // Delete Song
     deleteSong = (index) =>{
-        // let playlistkey = this.state.currentList.key;
-        // console.log("playlistname: "+ playlistkey);
-        // let title = this.state.currentList.songs[key].title
-        // console.log("Key content: "+this.state.currentList.songs[key].title);
         this.state.currentList.songs.splice(index,1)
         this.setState(prevState => ({
             currentList: this.state.currentList,
             listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
             sessionData: this.state.sessionData,
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
         }), () => {
            // let modal = document.getElementById("delete-song-modal");
             this.db.mutationUpdateList(this.state.currentList);
@@ -432,12 +434,19 @@ class App extends React.Component {
         //this.deleteSong(this.state.DeleteSongID-1);
         let index = this.state.DeleteSongID-1
         let song = this.state.currentList.songs[this.state.DeleteSongID-1]
-        let transaction = new DeleteSong_Transaction(this,index,song);
-        this.tps.addTransaction(transaction)
+        this.setState(prevState => ({
+            currentList: this.state.currentList,
+            listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
+            sessionData: this.state.sessionData,
+            DeleteSongID: prevState.DeleteSongID,
+            RenameSongID: prevState.RenameSongID,
+        }), () => {
+            let transaction = new DeleteSong_Transaction(this,index,song);
+            this.tps.addTransaction(transaction)
+           
+        });   
         this.hideDeleteSongModal();
     }
-
-
 
     //get delteed song Id through the processof: SongCard -> PlaylistCard -> App.js
     //And show deleteSongModal
@@ -447,7 +456,7 @@ class App extends React.Component {
             listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
             sessionData: prevState.sessionData,
             DeleteSongID: sonMsg,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
         }), () => {
             // PROMPT THE USER
             this.showDeleteSongModal();
@@ -460,32 +469,47 @@ class App extends React.Component {
             listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
             sessionData: prevState.sessionData,
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: RenameSonMsg
+            RenameSongID: RenameSonMsg,
         }), () => {
             // PROMPT THE USER
             this.showRenameSongModal();
         });        
     }
 
-    showDeleteSongModal(){
+    showDeleteSongModal =() =>{   
+        this.SetModalState(true);
         let modal = document.getElementById("delete-song-modal");
         modal.classList.add("is-visible");
         
     }
 
-    hideDeleteSongModal(){
+    hideDeleteSongModal =() =>{
+        this.SetModalState(false);
         let modal = document.getElementById("delete-song-modal");
         modal.classList.remove("is-visible");
     }
 
+    SetModalState = (State) =>{  
+        this.setState(prevState => ({
+            currentList: prevState.currentList,
+            listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
+            sessionData: prevState.sessionData,
+            DeleteSongID: prevState.DeleteSongID,
+            RenameSongID: prevState.RenameSongID,
+            ModalState: State
+        }));
+    }
+
   
 
-    showRenameSongModal(){
+    showRenameSongModal=() =>{
+        this.SetModalState(true);
         let modal = document.getElementById("edit-song-modal");
         modal.classList.add("is-visible");
     }
 
-    hideRenameSongModal(){
+    hideRenameSongModal=() =>{
+        this.SetModalState(false);
         let modal = document.getElementById("edit-song-modal");
         modal.classList.remove("is-visible");
     }
@@ -497,7 +521,7 @@ class App extends React.Component {
             listKeyPairMarkedForDeletion : keyPair,
             sessionData: prevState.sessionData,
             DeleteSongID: prevState.DeleteSongID,
-            RenameSongID: prevState.RenameSongID
+            RenameSongID: prevState.RenameSongID,
         }), () => {
             // PROMPT THE USER
             this.showDeleteListModal();
@@ -515,35 +539,28 @@ class App extends React.Component {
         modal.classList.remove("is-visible");
     }
 
-
-
     render() { 
         this.ShortcutDetect()
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
         let canClose = this.state.currentList !== null;
-        
-        if(!this.state.currentList)
-        {
-            canAddSong = false;
-            canUndo = false;
-            canRedo = false;
-            canClose = false;
-            console.log("currentlist is empty");
-        }
-        else{
-            canAddSong = true;
-            canUndo = false;
-            canRedo = false;
-            canClose = true;
-            console.log("currentlist is not empty");
-        }
-        
-       
 
-    
-        
+        //console.log("state: " + this.state.ModalState);
+       if(this.state.ModalState)
+       {
+         canAddSong = false;
+         canUndo = false;
+         canRedo = false;
+         canClose = false;
+       }
+       else{
+        canAddSong = this.state.currentList !== null;
+        canUndo = this.tps.hasTransactionToUndo();
+        canRedo = this.tps.hasTransactionToRedo();
+        canClose = this.state.currentList !== null;
+       }
+
         return (
             <div id="root">
                 <Banner />
