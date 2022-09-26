@@ -545,8 +545,8 @@ class App extends React.Component {
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
         let canClose = this.state.currentList !== null;
+        let canAddList = this.state.currentList === null;
 
-        //console.log("state: " + this.state.ModalState);
        if(this.state.ModalState)
        {
          canAddSong = false;
@@ -566,6 +566,7 @@ class App extends React.Component {
                 <Banner />
                 <SidebarHeading
                     createNewListCallback={this.createNewList}
+                    canAddList={canAddList}
                 />
                 <SidebarList
                     currentList={this.state.currentList}

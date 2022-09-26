@@ -192,9 +192,10 @@ input {
 }
 
 .modal-root {
-  width: 1200px;
+  width: 900px;
+  height: 300px;
   position: relative;
-  max-width: 1200vw;
+  max-width: 1100vw;
   max-height: 600vh;
   overflow: visible;
   display: flex;
@@ -212,7 +213,7 @@ input {
 }
 
 .modal-north {
-  font-size:32pt;
+  font-size:25pt;
   font-weight: bold;
   background-color: #669966;
   color:white;
@@ -245,12 +246,12 @@ span {
 }
 
 .modal-prompt {  
-  font-size:28pt;
+  font-size:25pt;
   font-weight: bold;
 }
 
 .modal-textfield {
-  font-size:28pt;
+  font-size:25pt;
 }
 
 .modal-button {
