@@ -11,9 +11,7 @@ export default class RenameSongModal extends Component {
             songname = RenameSongKeyPair.songs[renameId-1].title
             artistname = RenameSongKeyPair.songs[renameId-1].artist
             youtubeid = RenameSongKeyPair.songs[renameId-1].youTubeId
-            // console.log("songname: "+ songname)
-            // console.log("artistname: "+ artistname)
-            // console.log("youtubeid: "+ youtubeid)
+            
             document.getElementById("edit-song-modal-title-textfield").value = songname
             document.getElementById("edit-song-modal-artist-textfield").value = artistname
             document.getElementById("edit-song-modal-youTubeId-textfield").value = youtubeid

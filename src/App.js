@@ -541,8 +541,8 @@ class App extends React.Component {
         modal.classList.remove("is-visible");
     }
 
-    render() { 
-        this.ShortcutDetect()
+        render() { 
+            this.ShortcutDetect()
         let canAddSong = this.state.currentList !== null;
         let canClose = this.state.currentList !== null;
         let canAddList = this.state.currentList === null;

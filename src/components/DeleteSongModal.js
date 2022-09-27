@@ -20,7 +20,7 @@ export default class DeleteSongModal extends Component {
             </div>                
             <div class="modal-center">
                 <div class="modal-center-content">
-                    Are you sure you wish to permanently Remove {songname}<span id="delete-song-span"></span> by {artistname} from the playlist?
+                    Are you sure you wish to permanently Remove <span>{songname}</span><span id="delete-song-span"></span> by<span>{artistname} </span> from the playlist?
                 </div>
             </div>
             <div class="modal-south">
